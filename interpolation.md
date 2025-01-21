@@ -3,7 +3,17 @@ In robot arm control, interpolation can be performed in two primary ways:
    * Concept: You interpolate directly between the target poses (positions and orientations) represented by 4x4 homogeneous transformation matrices (often denoted as "T matrices").
    * Methods:
      * Screw Theory: This elegant mathematical framework represents rigid body motions as screws (a combination of translation and rotation along a line). Interpolation can be performed smoothly along these screw axes.
-     * Quaternion Interpolation: If you're primarily concerned with interpolating orientations, quaternion interpolation (like SLERP) provides smooth and efficient rotations.
+     * Quaternion Interpolation: If you're primarily concerned with interpolating orientations, quaternion interpolation (like SLERP) provides smooth and efficient rotations. Primarily focuses on rotations, not translations. Here’s how it works:
+
+        1. **Concept**: Quaternions avoid the gimbal lock problem and provide smooth rotational transitions.
+        2. **Algorithm**:
+           - Given two quaternions $q_1$ and $q_2$, SLERP computes the intermediate quaternion $q(t)$ for $t$ in [0, 1].
+           - The formula is $q(t) = \frac{\sin((1-t) \theta)}{\sin(\theta)} q_1 + \frac{\sin(t \theta)}{\sin(\theta)} q_2 $, where $\theta$ is the angle between $q_1$ and $q_2$.
+        3. **Advantages**:
+           - Produces smooth transitions.
+           - Maintains constant rotational velocity.
+
+SLERP is efficient and ideal for applications needing smooth orientation changes, like in robotics and computer graphics.
  * Interpolation in Joint Space (q Positions):
    * Concept: You interpolate between the joint angles (q) calculated using inverse kinematics for each target pose.
    * Methods:
